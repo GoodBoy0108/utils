@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Editor</title>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="editor.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mx-auto px-4 py-6 max-w-7xl">
+    <!-- 顶部标题和操作按钮 -->
+    <header class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-800">JSON Editor</h1>
+      <div class="flex flex-wrap gap-2 mt-4">
+        <button id="validate-btn" class="action-button primary-btn">
+          <i class="fa fa-check-circle mr-2"></i> Validate
+        </button>
+        <button id="format-btn" class="action-button secondary-btn">
+          <i class="fa fa-indent mr-2"></i> Format
+        </button>
+        <button id="minify-btn" class="action-button accent-btn">
+          <i class="fa fa-compress mr-2"></i> Minify
+        </button>
+        <button id="save-btn" class="action-button danger-btn">
+          <i class="fa fa-save mr-2"></i> Save to Page
+        </button>
+        <button id="copy-btn" class="action-button neutral-btn">
+          <i class="fa fa-copy mr-2"></i> Copy
+        </button>
+      </div>
+    </header>
+    
+    <!-- 编辑器主体区域 - 左右分栏 -->
+    <div class="editor-container">
+      <!-- 左侧：原始JSON -->
+      <div class="editor-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Original JSON</h2>
+          <span id="char-count" class="text-sm text-gray-600"></span>
+        </div>
+        <div class="panel-content">
+          <textarea id="json-input" class="json-textarea" placeholder="Enter or paste JSON here..."></textarea>
+          <div id="validation-message" class="mt-2 text-sm"></div>
+        </div>
+      </div>
+      
+      <!-- 右侧：解析后的JSON -->
+      <div class="editor-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Parsed JSON</h2>
+          <div>
+            <button id="expand-all" class="text-xs px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 transition">
+              Expand All
+            </button>
+            <button id="collapse-all" class="text-xs px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 transition ml-1">
+              Collapse All
+            </button>
+          </div>
+        </div>
+        <div class="panel-content">
+          <div id="visual-editor" class="json-visualization"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 状态消息 -->
+    <div id="status-bar" class="status-bar hidden"></div>
+  </div>
+
+  <script src="editor.js"></script>
+</body>
+</html>
+  

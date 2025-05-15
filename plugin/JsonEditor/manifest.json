@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "JSON Editor",
+  "version": "1.2",
+  "description": "Edit JSON data directly in the browser",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "JSON Editor"
+  },
+  "permissions": ["activeTab", "scripting", "tabs", "storage"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["editor.html", "editor.js", "editor.css", "tailwind.css"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+  }
+}
+  
