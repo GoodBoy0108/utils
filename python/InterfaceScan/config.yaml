@@ -1,0 +1,9 @@
+projects:
+  smart:
+    url: "https://t-prod.igo1996.com/v3/api-docs"
+  pte:
+    url: "https://admin.igopte.com/dev-api/v3/api-docs"
+  kp:
+    url: "http://150.158.40.189:10112/v3/api-docs"
+  tzl:
+    url: "http://150.158.40.189:10112/v3/api-docs"

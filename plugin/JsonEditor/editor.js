@@ -55,7 +55,12 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 验证按钮点击事件
   validateBtn.addEventListener('click', function() {
-    validateJSON();
+    const result = validateJSON();
+    if (result) {
+      showStatus('校验成功', 'success');
+    } else {
+      showStatus('校验失败，请检查JSON格式', 'error');
+    }
   });
   
   // 格式化按钮点击事件
@@ -64,10 +69,10 @@ document.addEventListener('DOMContentLoaded', function() {
       jsonData = JSON.parse(jsonInput.value);
       jsonInput.value = JSON.stringify(jsonData, null, 2);
       renderVisualEditor(jsonData);
-      showStatus('JSON formatted successfully', 'success');
+      showStatus('格式化成功', 'success');
       updateCharCount();
     } catch (e) {
-      showStatus('Invalid JSON: ' + e.message, 'error');
+      showStatus('格式化失败：' + e.message, 'error');
     }
   });
   
@@ -77,50 +82,10 @@ document.addEventListener('DOMContentLoaded', function() {
       jsonData = JSON.parse(jsonInput.value);
       jsonInput.value = JSON.stringify(jsonData);
       renderVisualEditor(jsonData);
-      showStatus('JSON minified successfully', 'success');
+      showStatus('压缩成功', 'success');
       updateCharCount();
     } catch (e) {
-      showStatus('Invalid JSON: ' + e.message, 'error');
-    }
-  });
-  
-  // 保存按钮点击事件
-  saveBtn.addEventListener('click', function() {
-    try {
-      const jsonString = jsonInput.value.trim();
-      if (!jsonString) {
-        showStatus('JSON is empty', 'error');
-        return;
-      }
-      
-      jsonData = JSON.parse(jsonString);
-      
-      // 向原始标签发送消息保存JSON
-      if (typeof chrome !== 'undefined' && chrome.tabs) {
-        chrome.tabs.sendMessage(originalTabId, {action: "saveJSON", json: jsonString}, function(response) {
-          if (response && response.success) {
-            showStatus('JSON saved to page successfully', 'success');
-            
-            // 关闭编辑器标签
-            setTimeout(() => {
-              chrome.tabs.getCurrent(function(tab) {
-                if (chrome.runtime.lastError) {
-                  console.error('Error closing tab:', chrome.runtime.lastError);
-                  showStatus('无法关闭标签页', 'error');
-                } else {
-                  chrome.tabs.remove(tab.id);
-                }
-              });
-            }, 1500);
-          } else {
-            showStatus('Failed to save JSON to page', 'error');
-          }
-        });
-      } else {
-        showStatus('无法访问Chrome标签API，请确保以扩展方式运行', 'error');
-      }
-    } catch (e) {
-      showStatus('Cannot save invalid JSON: ' + e.message, 'error');
+      showStatus('压缩失败：' + e.message, 'error');
     }
   });
   
@@ -128,13 +93,13 @@ document.addEventListener('DOMContentLoaded', function() {
   copyBtn.addEventListener('click', function() {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(jsonInput.value)
-        .then(() => showStatus('JSON copied to clipboard', 'success'))
-        .catch(err => showStatus('Failed to copy: ' + err.message, 'error'));
+        .then(() => showStatus('已复制到剪贴板', 'success'))
+        .catch(err => showStatus('复制失败：' + err.message, 'error'));
     } else {
       // 回退到旧方法
       jsonInput.select();
       document.execCommand('copy');
-      showStatus('JSON copied to clipboard', 'success');
+      showStatus('已复制到剪贴板', 'success');
     }
   });
   
@@ -238,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 创建键名显示
     const keyContainer = document.createElement('div');
-    keyContainer.className = 'flex items-start relative';
+    keyContainer.className = 'flex items-start';
     
     const keySpan = document.createElement('span');
     keySpan.className = 'json-key';
@@ -347,11 +312,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // 开始编辑节点值
   function startEditing(path, currentValue, displayElement) {
     const parentElement = displayElement.parentElement;
-    const node = parentElement.closest('.json-node');
-    
-    // 添加编辑状态类
-    node.classList.add('json-editing');
-    
     parentElement.innerHTML = '';
     
     let inputElement;
@@ -471,13 +431,11 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       updateNodeValue(path, newValue);
-      node.classList.remove('json-editing'); // 保存后移除编辑状态
     });
     
     // 取消修改
     cancelBtn.addEventListener('click', function() {
       renderVisualEditor(jsonData);
-      node.classList.remove('json-editing'); // 取消后移除编辑状态
     });
     
     // 按Enter保存
@@ -591,17 +549,44 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 显示状态消息
   function showStatus(message, type) {
+    // console.log('showStatus:', message, type); // 调试用
     statusBar.textContent = message;
     statusBar.className = `status-bar ${type === 'success' ? 'success' : 'error'} fade-in`;
     statusBar.style.display = 'block';
-    
+    statusBar.style.visibility = 'visible';
+    statusBar.style.opacity = '1';
     setTimeout(() => {
       statusBar.style.display = 'none';
-    }, 3000);
+    }, 5000); // 显示5秒
   }
   
   // 更新字符计数
   function updateCharCount() {
     charCount.textContent = `${jsonInput.value.length} characters`;
   }
+
+  // 初始化行号显示
+  function initLineNumbers() {
+    const textarea = document.getElementById('json-input');
+    const lineNumbers = document.getElementById('line-numbers');
+    
+    function updateLineNumbers() {
+      const lines = textarea.value.split('\n');
+      lineNumbers.innerHTML = lines.map((_, i) => `<div>${i + 1}</div>`).join('');
+    }
+    
+    // 监听输入事件
+    textarea.addEventListener('input', updateLineNumbers);
+    
+    // 同步滚动
+    textarea.addEventListener('scroll', () => {
+      lineNumbers.scrollTop = textarea.scrollTop;
+    });
+    
+    // 初始化行号
+    updateLineNumbers();
+  }
+
+  // 在文档加载完成后初始化
+  initLineNumbers();
 });  

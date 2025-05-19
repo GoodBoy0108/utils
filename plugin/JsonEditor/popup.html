@@ -7,28 +7,39 @@
   <style>
     body {
       min-width: 250px;
-      padding: 15px;
+      padding: 6px 5px 6px 5px;
       font-family: Arial, sans-serif;
     }
     button {
       width: 100%;
-      padding: 8px;
+      padding: 5px 0;
       margin: 5px 0;
-      background-color: #4CAF50;
+      background: linear-gradient(180deg, #4CAF50 0%, #43a047 100%);
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 24px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(76,175,80,0.18), 0 1.5px 4px rgba(0,0,0,0.08);
       cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
     }
     button:hover {
-      background-color: #45a049;
+      background: linear-gradient(180deg, #43a047 0%, #4CAF50 100%);
+      box-shadow: 0 6px 24px rgba(76,175,80,0.22), 0 2px 8px rgba(0,0,0,0.10);
+      transform: translateY(-2px) scale(1.03);
     }
-    .status {
+    button:active {
+      background: linear-gradient(180deg, #388e3c 0%, #43a047 100%);
+      box-shadow: 0 2px 8px rgba(76,175,80,0.15) inset, 0 1px 2px rgba(0,0,0,0.10);
+      transform: translateY(1px) scale(0.98);
+    }
+    /* .status {
       margin-top: 10px;
       padding: 8px;
       border-radius: 4px;
       text-align: center;
-    }
+    } */
     .error {
       background-color: #f8d7da;
       color: #721c24;

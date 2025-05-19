@@ -22,9 +22,9 @@
         <button id="minify-btn" class="action-button accent-btn">
           <i class="fa fa-compress mr-2"></i> Minify
         </button>
-        <button id="save-btn" class="action-button danger-btn">
+        <!--<button id="save-btn" class="action-button danger-btn">
           <i class="fa fa-save mr-2"></i> Save to Page
-        </button>
+        </button>-->
         <button id="copy-btn" class="action-button neutral-btn">
           <i class="fa fa-copy mr-2"></i> Copy
         </button>
@@ -40,7 +40,10 @@
           <span id="char-count" class="text-sm text-gray-600"></span>
         </div>
         <div class="panel-content">
-          <textarea id="json-input" class="json-textarea" placeholder="Enter or paste JSON here..."></textarea>
+          <div class="editor-wrapper">
+            <div class="line-numbers" id="line-numbers"></div>
+            <textarea id="json-input" class="json-textarea" placeholder="Enter or paste JSON here..."></textarea>
+          </div>
           <div id="validation-message" class="mt-2 text-sm"></div>
         </div>
       </div>
